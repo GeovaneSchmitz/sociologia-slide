@@ -100,7 +100,6 @@ export default defineComponent({
   height: 100%;
   z-index: 2;
   display: flex;
-  align-items: flex-end;
   justify-content: center;
 }
 
