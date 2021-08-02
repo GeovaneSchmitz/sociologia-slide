@@ -1,0 +1,30 @@
+{
+  "builds": [
+    {
+      "src": "nuxt.config.js",
+      "use": "@nuxtjs/vercel-builder",
+      "config": {
+        "serverFiles": [
+          "lang/**",
+          "build-utils/**",
+          "nuxt.config.js",
+          "node.tsconfig.json"
+        ],
+        "tscOptions": {
+          "skipLibCheck": true
+        }
+      }
+    }
+  ],
+  "routes": [
+    { "src": "/public/.+", "headers": { "Cache-Control": "max-age=31557600" } },
+    {
+      "src": "/sw.js",
+      "headers": {
+        "cache-control": "public, must-revalidate",
+        "Service-Worker-Allowed": "/"
+      }
+    },
+    { "src": "/(.*)", "dest": "/" }
+  ]
+}
