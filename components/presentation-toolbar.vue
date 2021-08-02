@@ -1,6 +1,6 @@
 <template lang="pug">
 .toolbar-wrapper(ref="wrapperElement" @click="mouseClick($event)", @mousemove="mouseMove" :class="{'toolbar-hide-cursor': !toolbarActive}")
-  .toolbar(:class='{ "toolbar-active": toolbarActive}', @pointerout="toolbarOut", ref="toolbar")
+  .toolbar(:class='{ "toolbar-active": toolbarActive}',  @pointerover="toolbarOver" @pointerout="toolbarOut", ref="toolbar")
     .toolbar-button(@click="toolbarToPrevious()")
       |<
     .counter
@@ -35,6 +35,14 @@ export default defineComponent({
         index.value = value;
       }
     );
+
+    const toolbarOver = () => {
+      toolbarActive.value = true;
+      if (intervalHideToolbar) {
+        clearTimeout(intervalHideToolbar);
+      }
+    };
+
     const toolbarOut = () => {
       if (intervalHideToolbar) {
         clearTimeout(intervalHideToolbar);
@@ -54,7 +62,7 @@ export default defineComponent({
 
     const toolbarToPrevious = () => {
       toolbarOut();
-      dispatch('slide/ToPrevious');
+      dispatch('slide/toPrevious');
     };
 
     const mouseClick = (event: MouseEvent) => {
@@ -85,6 +93,7 @@ export default defineComponent({
       mouseMove,
       mouseClick,
       toolbarOut,
+      toolbarOver,
       toolbarToNext,
       toolbarToPrevious,
       index
@@ -108,13 +117,6 @@ export default defineComponent({
   width: 50%;
 }
 
-.toolbar-color:hover {
-  opacity: 0.8;
-}
-
-.toolbar-color:active {
-  opacity: 1;
-}
 .toolbar-button,
 .counter {
   background-color: var(--component-background-color);
@@ -132,6 +134,7 @@ export default defineComponent({
 }
 .toolbar-hide-cursor {
   cursor: none;
+  opacity: 0;
 }
 
 .toolbar {

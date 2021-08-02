@@ -41,16 +41,17 @@ export default defineComponent({
       if (enable) return;
       enable = true;
       let bacgroundXShift = 0;
-      const fps = 15;
+      const frameSkips = 15;
+      const delta = 300 / 9
       let frame = 0;
       const step = () => {
         if (!enable) return;
         frame++;
-        if (frame != fps) return window.requestAnimationFrame(step);
+        if (frame != frameSkips) return window.requestAnimationFrame(step);
         frame = 0;
-        bacgroundXShift += 25;
+        bacgroundXShift += delta;
         if (bacgroundXShift > 100) bacgroundXShift = 0;
-        backgroundElement.value.style.backgroundPosition = `${bacgroundXShift}% 0%`;
+        backgroundElement.value.style.backgroundPosition = `${bacgroundXShift}% ${bacgroundXShift}%`;
 
         window.requestAnimationFrame(step);
       };
@@ -67,7 +68,7 @@ export default defineComponent({
   background-image: url('../assets/images/fundo.webp');
   width: 100em;
   height: 56.25em;
-  background-size: auto 150em;
+  background-size: 400em auto;
   background-repeat: no-repeat;
   position: absolute;
 }
