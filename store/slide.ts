@@ -56,6 +56,33 @@ export const state = (): BreakpointsState => ({ breakpoints, currentIndex: 0 });
 export type RootState = ReturnType<typeof state>;
 
 let timeout: any;
+const preload = (url: string) => {
+  return new Promise((resolve, reject) => {
+    if (process.client) {
+      const img = new Image();
+      img.src = url;
+      img.addEventListener('load', () => resolve(img));
+    } else {
+      resolve(null);
+    }
+  });
+};
+
+const images = [
+  require('../assets/images/foice.webp'),
+  require('../assets/images/fundo.webp'),
+  require('../assets/images/martelo.webp')
+];
+
+for (const breakpoint of breakpoints) {
+  if (breakpoint.images) {
+    for (const image of breakpoint.images) {
+      images.push(image);
+    }
+  }
+}
+
+const loadedImages = Promise.all(images.map((image) => preload(image)));
 
 export const mutations: MutationTree<RootState> = {
   setIndex(state, payload) {
@@ -68,8 +95,10 @@ export const mutations: MutationTree<RootState> = {
 };
 
 export const actions: ActionTree<RootState, RootState> = {
-  toNext({ state, dispatch, commit }) {
+  async toNext({ state, dispatch, commit }) {
     let newIndex: number;
+    await loadedImages;
+
     if (state.currentIndex === state.breakpoints.length - 1) {
       newIndex = 0;
     } else {
@@ -86,8 +115,9 @@ export const actions: ActionTree<RootState, RootState> = {
     }
   },
 
-  toPrevious({ state, commit, dispatch }) {
+  async toPrevious({ state, commit, dispatch }) {
     let newIndex: number;
+    await loadedImages;
     if (state.currentIndex === 0) {
       newIndex = state.breakpoints.length - 1;
     } else {

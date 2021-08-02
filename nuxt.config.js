@@ -20,7 +20,7 @@ export default {
   },
 
   head: {
-    title: 'CDIO - Slides',
+    title: 'Estado Socialista - Slides',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' }
@@ -106,7 +106,7 @@ export default {
         'xlink:href',
         'href'
       ]
-
+  
       config.module.rules.forEach((rule) => {
         rule.oneOf &&
           rule.oneOf.forEach((useOf) => {
