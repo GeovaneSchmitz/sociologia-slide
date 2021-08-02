@@ -13,10 +13,10 @@ export default {
 
   ssr: true,
 
-  target: 'server',
+  target: 'static',
 
   render: {
-    csp: true
+    csp: false
   },
 
   head: {
