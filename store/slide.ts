@@ -43,6 +43,7 @@ interface Breakpoint {
   id: string;
   topics?: string[];
   images?: string[];
+  background?: string;
   autoplay?: number;
 }
 
@@ -70,6 +71,7 @@ const preload = (url: string) => {
 
 const images = [
   require('../assets/images/foice.webp'),
+  require('../assets/images/mapa_fundo.webp'),
   require('../assets/images/fundo.webp'),
   require('../assets/images/martelo.webp')
 ];

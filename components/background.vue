@@ -1,7 +1,7 @@
 <template lang="pug">
   div
     .background(ref="backgroundElement")
-    div.image(:class="{'small':isSmall}")
+    div.image(:class="{'small':isSmall, 'end': isEnd}")
       div(:class="{ 'martelo': showCover }" ref="marteloElement")
       div(:class="{ 'foice': showCover }" ref="foiceElement")
 </template>
@@ -22,6 +22,7 @@ export default defineComponent({
     const backgroundElement = ref() as Ref<HTMLElement>;
     const foiceElement = ref() as Ref<HTMLElement>;
     const isSmall = ref(false);
+    const isEnd = ref(false);
 
     const { getters } = useStore<RootState>();
 
@@ -30,7 +31,9 @@ export default defineComponent({
       (value) => {
         if (!value) return;
         showCover.value = value.id !== 'cover';
-        isSmall.value = showCover.value && value.id !== 'capa';
+        isSmall.value =
+          showCover.value && value.id !== 'capa' && value.id !== 'fim';
+        isEnd.value = value.id === 'fim';
         if (value.id === 'cover' || value.id === 'capa') startAnimation();
         else enable = false;
       }
@@ -42,7 +45,7 @@ export default defineComponent({
       enable = true;
       let bacgroundXShift = 0;
       const frameSkips = 15;
-      const delta = 300 / 9
+      const delta = 300 / 9;
       let frame = 0;
       const step = () => {
         if (!enable) return;
@@ -58,7 +61,7 @@ export default defineComponent({
       window.requestAnimationFrame(step);
     };
     startAnimation();
-    return { backgroundElement, foiceElement, showCover, isSmall };
+    return { backgroundElement, foiceElement, showCover, isSmall, isEnd };
   }
 });
 </script>
@@ -147,6 +150,29 @@ export default defineComponent({
     transform: translate3d(-23em, 0, 0) scale(0.2);
   } */
 }
+
+@keyframes endanimf {
+  0% {
+    transform: translate3d(0, 15em, 0) scale(0.4);
+  }
+  60% {
+    transform: translate3d(17em, 0, 0) scale(0.9) rotate(-63deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+  }
+}
+@keyframes endanimm {
+  0% {
+    transform: translate3d(0, 15em, 0) scale(0.4);
+  }
+  60% {
+    transform: translate3d(-30em, 0, 0) scale(0.9) rotate(53deg);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.9);
+  }
+}
 .foice {
   animation: foice 4s forwards;
   background-image: url('../assets/images/foice.webp');
@@ -161,5 +187,11 @@ export default defineComponent({
 }
 .small .foice {
   animation: smalloice 1s forwards ease-in-out;
+}
+.end .foice {
+  animation: endanimf 2s forwards;
+}
+.end .martelo {
+  animation: endanimm 2s forwards;
 }
 </style>
